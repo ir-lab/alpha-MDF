@@ -11,8 +11,8 @@ from .attention import PositionalEncoder
 from .attention import TypeEncoder
 from .attention import ResidualAttentionBlock
 from .attention import KalmanAttentionBlock
-from .utils import SensorModel, miniSensorModel, DecoderModel, miniDecoderModel
-from .utils import ImgToLatentModel, miniImgToLatentModel, ImageRecover
+from .utils import SensorModel, DecoderModel
+from .utils import ImgToLatentModel
 import pdb
 
 """
@@ -23,7 +23,7 @@ using the attention weights to represent the innovation matrix in Kalman update
 """
 
 
-class transformer_process_model(nn.Module):
+class TransformerProcessModel(nn.Module):
     """
     process model takes a state or a stack of states (t-n:t-1) and
     predict the next state t. the process model is flexiable, we can inject the known
@@ -35,7 +35,7 @@ class transformer_process_model(nn.Module):
     """
 
     def __init__(self, num_ensemble, dim_x, win_size, dim_model, num_heads):
-        super(transformer_process_model, self).__init__()
+        super(TransformerProcessModel, self).__init__()
         self.num_ensemble = num_ensemble
         self.dim_x = dim_x
         self.dim_model = dim_model
@@ -93,7 +93,7 @@ class transformer_process_model(nn.Module):
         return output
 
 
-class transformer_process_model_action(nn.Module):
+class TransformerProcessModelAction(nn.Module):
     """
     process model takes a state or a stack of states (t-n:t-1) and
     predict the next state t. this process model takes in the state and actions
@@ -106,7 +106,7 @@ class transformer_process_model_action(nn.Module):
     """
 
     def __init__(self, num_ensemble, dim_x, dim_a, win_size, dim_model, num_heads):
-        super(transformer_process_model_action, self).__init__()
+        super(TransformerProcessModelAction, self).__init__()
         self.num_ensemble = num_ensemble
         self.dim_x = dim_x
         self.dim_a = dim_a
@@ -279,7 +279,7 @@ class NewAttentionGain(nn.Module):
         return state, atten
 
 
-class latentAttentionGain(nn.Module):
+class LatentAttentionGain(nn.Module):
     def __init__(self, full_mod, dim_x, dim_z, dim_model, num_heads):
         """
         attention gain module is used to replace the Kalman update step, this module
@@ -298,7 +298,7 @@ class latentAttentionGain(nn.Module):
         output:
         atten -> [batch_size, dim_x, dim_y]
         """
-        super(latentAttentionGain, self).__init__()
+        super(LatentAttentionGain, self).__init__()
         self.full_mod = full_mod
         self.dim_z = dim_z
         self.dim_x = dim_x
@@ -390,72 +390,6 @@ class latentAttentionGain(nn.Module):
 
 ####################################################################
 ############### put all model together (don't touch this ) #########
-
-
-class Test_latent_enKF(nn.Module):
-    def __init__(self, num_ensemble, win_size, dim_x, dim_z, dim_a, input_size):
-        super(Test_latent_enKF, self).__init__()
-        self.num_ensemble = num_ensemble
-        self.dim_x = dim_x
-        self.dim_z = dim_z
-        self.dim_a = dim_a
-        self.input_size = input_size
-        self.win_size = win_size
-
-        # instantiate model
-        self.process_model = transformer_process_model(
-            self.num_ensemble, self.dim_x, self.win_size, 256, 8
-        )
-        self.img_2_latent = ImgToLatentModel(
-            self.num_ensemble, self.win_size, self.dim_x
-        )
-        self.sensor_model = SensorModel(self.num_ensemble, self.input_size, self.dim_z)
-        self.attention_update = NewAttentionGain(
-            self.dim_x, self.dim_z, self.num_ensemble, 4
-        )
-        self.latent_2_img = ImageRecover(self.num_ensemble, self.dim_x)
-
-    def forward(self, inputs, states):
-        # decompose inputs and states
-        batch_size = inputs[0].shape[0]
-        raw_obs = inputs
-        images = states
-
-        ##### prediction step #####
-        # img -> latent
-        latent = self.img_2_latent(images)
-
-        # process model on latent state
-        state_pred = self.process_model(latent)
-        state_pred = state_pred[:, :, -1, :]
-        m_A = torch.mean(state_pred, axis=1)  # m_A -> [bs, dim_x]
-
-        ##### update step #####
-
-        # get latent observation from raw sensor
-        ensemble_z, z, encoding = self.sensor_model(raw_obs)
-
-        # measurement update
-        state_new, atten = self.attention_update(state_pred, ensemble_z)
-        m_state_new = torch.mean(state_new, axis=1)
-
-        # recover image
-        out_image = self.latent_2_img(m_state_new)
-
-        # gather output
-        m_state_new = rearrange(m_state_new, "bs (k dim) -> bs k dim", k=1)
-        m_state_pred = rearrange(m_A, "bs (k dim) -> bs k dim", k=1)
-        output = (
-            out_image.to(dtype=torch.float32),
-            m_state_new.to(dtype=torch.float32),
-            m_state_pred.to(dtype=torch.float32),
-            z.to(dtype=torch.float32),
-            atten.to(dtype=torch.float32),
-        )
-        return output
-
-
-####################################################################
 class AuxiliaryStateModel(nn.Module):
     """
     input -> [batch_size, timestep, dim_gt]
@@ -535,6 +469,7 @@ class miniAuxiliaryStateModel(nn.Module):
         latent_state = output
         return latent_state
 
+
 ##############################################################
 class UR5_latent_model(nn.Module):
     """
@@ -570,7 +505,7 @@ class UR5_latent_model(nn.Module):
         self.full_modality = list(range(0, sensor_len))
 
         # instantiate model
-        self.process_model = transformer_process_model(
+        self.process_model = TransformerProcessModel(
             self.num_ensemble, self.dim_x, self.win_size, 256, 8
         )
         self.encoder_models = torch.nn.ModuleList(
@@ -580,7 +515,7 @@ class UR5_latent_model(nn.Module):
                 SensorModel(self.num_ensemble, input_size_1, self.dim_z),
             ]
         )
-        self.attention_update = latentAttentionGain(
+        self.attention_update = LatentAttentionGain(
             self.full_modality, self.dim_x, self.dim_z, self.num_ensemble, 4
         )
         self.decoder = DecoderModel(self.num_ensemble, self.dim_x, self.dim_gt)
@@ -663,7 +598,7 @@ class UR5_push_latent_model(nn.Module):
         self.full_modality = list(range(0, sensor_len))
 
         # instantiate model
-        self.process_model = transformer_process_model(
+        self.process_model = TransformerProcessModel(
             self.num_ensemble, self.dim_x, self.win_size, 256, 8
         )
         self.encoder_models = torch.nn.ModuleList(
@@ -674,7 +609,7 @@ class UR5_push_latent_model(nn.Module):
                 SensorModel(self.num_ensemble, input_size_2, self.dim_z),
             ]
         )
-        self.attention_update = latentAttentionGain(
+        self.attention_update = LatentAttentionGain(
             self.full_modality, self.dim_x, self.dim_z, self.num_ensemble, 4
         )
         self.decoder = DecoderModel(self.num_ensemble, self.dim_x, self.dim_gt)
@@ -757,7 +692,7 @@ class KITTI_latent_model(nn.Module):
         self.full_modality = list(range(0, sensor_len))
 
         # instantiate model
-        self.process_model = transformer_process_model(
+        self.process_model = TransformerProcessModel(
             self.num_ensemble, self.dim_x, self.win_size, 256, 8
         )
         self.encoder_models = torch.nn.ModuleList(
@@ -765,7 +700,7 @@ class KITTI_latent_model(nn.Module):
                 ImgToLatentModel(self.num_ensemble, self.dim_x, channel_img_1),
             ]
         )
-        self.attention_update = latentAttentionGain(
+        self.attention_update = LatentAttentionGain(
             self.full_modality, self.dim_x, self.dim_z, self.num_ensemble, 4
         )
         self.decoder = DecoderModel(self.num_ensemble, self.dim_x, self.dim_gt)
@@ -848,7 +783,7 @@ class UR5real_latent_model(nn.Module):
         self.full_modality = list(range(0, sensor_len))
 
         # instantiate model
-        self.process_model = transformer_process_model(
+        self.process_model = TransformerProcessModel(
             self.num_ensemble, self.dim_x, self.win_size, 256, 8
         )
         self.encoder_models = torch.nn.ModuleList(
@@ -857,7 +792,7 @@ class UR5real_latent_model(nn.Module):
                 SensorModel(self.num_ensemble, input_size_1, self.dim_z),
             ]
         )
-        self.attention_update = latentAttentionGain(
+        self.attention_update = LatentAttentionGain(
             self.full_modality, self.dim_x, self.dim_z, self.num_ensemble, 4
         )
         self.decoder = DecoderModel(self.num_ensemble, self.dim_x, self.dim_gt)
@@ -938,7 +873,7 @@ class Soft_robot_latent_model(nn.Module):
         self.full_modality = list(range(0, sensor_len))
 
         # instantiate model
-        self.process_model = transformer_process_model_action(
+        self.process_model = TransformerProcessModelAction(
             self.num_ensemble, self.dim_x, self.dim_a, self.win_size, 256, 8
         )
         self.encoder_models = torch.nn.ModuleList(
@@ -948,7 +883,7 @@ class Soft_robot_latent_model(nn.Module):
                 SensorModel(self.num_ensemble, input_size_1, self.dim_z),
             ]
         )
-        self.attention_update = latentAttentionGain(
+        self.attention_update = LatentAttentionGain(
             self.full_modality, self.dim_x, self.dim_z, self.num_ensemble, 4
         )
         self.decoder = DecoderModel(self.num_ensemble, self.dim_x, self.dim_gt)
