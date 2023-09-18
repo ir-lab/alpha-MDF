@@ -13,7 +13,6 @@ from .attention import ResidualAttentionBlock
 from .attention import KalmanAttentionBlock
 from .utils import SensorModel, DecoderModel
 from .utils import ImgToLatentModel
-import pdb
 
 """
 this framework is built upon the differentiable Kalman Filters but the attention
