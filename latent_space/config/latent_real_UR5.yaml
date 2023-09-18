@@ -1,0 +1,55 @@
+mode:
+    mode: 'train'
+    multiprocessing_distributed: False
+    dist_url: tcp://127.0.0.1:2345
+    num_threads: 1
+    do_online_eval: True
+    parameter_path: ''
+train:
+    dim_x: 256
+    dim_z: 256
+    dim_a: ''
+    dim_gt: 10
+    num_ensemble: 32
+    win_size: 4
+    seed: 0
+    model_name: 'latent_real_UR5'
+    dataset: 'UR5_real'
+    sensor_len: 2
+    channel_img_1: 3
+    channel_img_2: ''
+    input_size_1: 7
+    input_size_2: ''
+    input_size_3: ''
+    data_path: './dataset/real_train_data.pkl'
+    batch_size: 64
+    num_epochs: 50
+    learning_rate: 1e-4
+    weight_decay: 1e-2
+    adam_eps: 1e-3
+    log_freq: 20
+    eval_freq: 2
+    save_freq: 5
+    log_directory: './experiments'
+    loss: 'mse'
+test:
+    dim_x: 256
+    dim_z: 256
+    dim_a: ''
+    dim_gt: 10
+    num_ensemble: 32
+    win_size: 4
+    model_name: 'latent_real_UR5'
+    data_path: './dataset/real_test_data.pkl'
+    sensor_len: 2
+    channel_img_1: 3
+    channel_img_2: ''
+    input_size_1: 7
+    input_size_2: ''
+    input_size_3: ''
+    checkpoint_path_1: ''
+    checkpoint_path_2: ''
+    dataset: 'UR5_real'
+optim:
+    optim: 'adamw'
+    lr_scheduler: 'polynomial_decay'
