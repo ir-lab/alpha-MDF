@@ -1,4 +1,4 @@
-# $\alpha$-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation
+# α-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation
 
 <p align="center">
 <img src = "img/alpha-MDF.gif" width ="800" />
