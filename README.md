@@ -65,7 +65,7 @@ We conduct a series of experiments to evaluate the efficacy of the $\alpha$-MDF 
 ### UR5 multimodal manipulation task
 We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arrangement tasks.
 <p align="center">
-<img src = "img/result.gif" width ="800" />
+<img src = "img/result-new.gif" width ="800" />
 </p>
 **Left**: manipulation in a simulated environment with modalities [RGB, Depth, Joints]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **Blue** correspond to low attention values, while those in **red** indicate high attention values.
 **Right**: real-time predicted joint angle trajectories.
