@@ -1,11 +1,13 @@
 # α-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation
 
 <p align="center">
-<img src = "img/framework.gif" width ="800" />
+<img src = "img/teaser.png" width ="600" />
 </p>
 
 Differentiable Filters are recursive Bayesian estimators that derive the state transition and measurement models from data alone. Their data-driven nature eschews the need for explicit analytical models, while remaining algorithmic components of the filtering process intact. As a result, the gain mechanism -- a critical component of the filtering process -- remains non-differentiable and cannot be adjusted to the specific nature of the task or context. In this paper, we propose an attention-based Multimodal Differentiable Filter ($\alpha$-MDF) which utilizes modern attention mechanisms to learn multimodal latent representations. Unlike previous differentiable filter frameworks, $\alpha$-MDF substitutes the traditional gain, e.g., the Kalman gain, with a neural attention mechanism. The approach generates specialized, context-dependent gains that can effectively combine multiple input modalities and observed variables. We validate $\alpha$-MDF on a diverse set of robot state estimation tasks in real world and simulation. Our results show $\alpha$-MDF achieves significant reductions in state estimation errors, demonstrating nearly 4-fold improvements compared to state-of-the-art sensor fusion strategies for rigid body robots. Additionally, the $\alpha$-MDF consistently outperforms differentiable filter baselines by up to 45% in soft robotics tasks.
-
+<p align="center">
+<img src = "img/framework.gif" width ="800" />
+</p>
 
 ## Getting Started
 We provide implementation using `Pytorch`. Clone the repo `git clone https://github.com/ir-lab/alpha-MDF.git` and then there are two options for running the code.
@@ -68,8 +70,16 @@ We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arra
 <img src = "img/result.gif" width ="800" />
 </p>
 
-**Left**: manipulation in a simulated environment with modalities [RGB, Depth, Joints]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **Blue** correspond to low attention values, while those in **red** indicate high attention values.
+**Left**: manipulation in a simulated environment with modalities [RGB, Depth, Joints]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **blue** correspond to low attention values, while those in **red** indicate high attention values.
 **Right**: real-time predicted joint angle trajectories.
+
+### Soft robot task
+This experiment involves implementing the $\alpha$-MDF to model the dynamics of a soft robot system, especially Tensegrity robot.
+<p align="center">
+<img src = "img/soft_robot.png" width ="600" />
+</p>
+
+Predicted end-effector (EE) positions and quaternion vectors **q** in the soft robot modeling task. The **top** row displays the actual robot posture at the corresponding time, with the orange circle indicating the EE positions, which are not included in the RGB modality input.
 
 ## Datasets
 #### KITTI_dataset
