@@ -10,7 +10,17 @@ Differentiable Filters are recursive Bayesian estimators that derive the state t
 ## Getting Started
 We provide implementation using `Pytorch`. Clone the repo `git clone https://github.com/ir-lab/alpha-MDF.git` and then there are two options for running the code.
 
-#### 1. docker workflow
+#### 1. Python Scripts
+
+Intall [PyTorch](https://pytorch.org/get-started/previous-versions/) and then set up the environment using `pip install -r requirements.txt`. Make sure to have corresponding libraries and dependencies installed on your local environment, i.e., we use PyTorch 1.8.0 with cuda11.1.
+
+For training or testing, Go to `./UR5` and then Run 
+
+```
+python train.py --config ./config/xxx.yaml
+```
+
+#### 2. docker workflow
 Edit the `conf.sh` file to set the environment variables used to start the docker 
 containers. 
 
@@ -23,7 +33,7 @@ CUDA_VISIBLE_DEVICES=0  # comma-separated list of GPU's to set visible.
 Build the docker image by running `./build.sh`.
 
 
-#### 2. Training or testing - PyTorch
+##### Training or testing
 Create or a modify a yaml file found in `./latent_space/config/xxx.yaml`, and set the mode parameter to perform the training or testing routine. 
 
 ```
@@ -39,21 +49,12 @@ where `$CONFIG_FILE` is the path to the config file.
 View the logs with `docker logs -f $CONTAINER_NAME`
 
 
-#### 4. Tensorboard
+##### Tensorboard
 
 Use the docker logs to copy the tensorboard link to a browser
 
 ```docker logs -f $CONTAINER_NAME-tensorboard```
- 
-#### 5. Without Docker
 
-Intall [PyTorch] (https://pytorch.org/get-started/previous-versions/) and then set up the environment using `pip install -r requirements.txt`. Make sure to have corresponding libraries and dependencies installed on your local environment, i.e., we use PyTorch 1.8.0 with cuda11.1.
-
-For training or testing, Go to `./UR5` and then Run 
-
-```
-python train.py --config ./config/xxx.yaml
-```
 
 
 
