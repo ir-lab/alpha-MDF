@@ -56,16 +56,19 @@ Use the docker logs to copy the tensorboard link to a browser
 ```docker logs -f $CONTAINER_NAME-tensorboard```
 
 
+## Results
+We conduct a series of experiments to evaluate the efficacy of the $\alpha$-MDF framework. Specifically, we aim to answer the following questions:
+1. Can the $\alpha$-MDF framework generalize across various tasks? 
+2. To what extent does the new filtering mechanism improve state tracking performance when compared to the current state-of-the-art?
+3. How does the use of multiple modalities compare to a subset of modalities for state estimation with differentiable filters?
 
-
-
-## Models
-### $\alpha$-MDF
-attention-based Multimodal Differentiable Filters
+### UR5 multimodal manipulation task
+We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arrangement tasks.
 <p align="center">
 <img src = "img/result.gif" width ="800" />
 </p>
-
+**Left**: manipulation in a simulated environment with modalities [RGB, Depth, Joints]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **Blue** correspond to low attention values, while those in **red** indicate high attention values.
+**Right**: real-time predicted joint angle trajectories.
 
 ## Datasets
 #### KITTI_dataset
