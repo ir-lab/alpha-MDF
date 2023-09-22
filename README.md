@@ -65,8 +65,9 @@ We conduct a series of experiments to evaluate the efficacy of the $\alpha$-MDF 
 ### UR5 multimodal manipulation task
 We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arrangement tasks.
 <p align="center">
-<img src = "img/result-new.gif" width ="800" />
+<img src = "img/result.gif" width ="800" />
 </p>
+
 **Left**: manipulation in a simulated environment with modalities [RGB, Depth, Joints]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **Blue** correspond to low attention values, while those in **red** indicate high attention values.
 **Right**: real-time predicted joint angle trajectories.
 
@@ -74,13 +75,17 @@ We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arra
 #### KITTI_dataset
 https://www.cvlibs.net/datasets/kitti/eval_odometry.php
 #### UR5_dataset
-Access to the dataset is available upon request.
+sim2real UR5 Dataset https://www.dropbox.com/sh/qgd3hc9iu1tb1cd/AABDfyYLyGpso605-19kbOhCa?dl=0 (Yifan: yzhou298@asu.edu)
 #### Tensegrity_dataset
-Access to the dataset is available upon request.
+The Dataset is available upon request. (Dr. Ikemoto: ikemoto@brain.kyutech.ac.jp)
 
-## Results
-TBD
-
-## Model Zoo
-TBD
-
+## Citation
+* Please cite the paper if you used any materials from this repo, Thanks.
+```
+@inproceedings{liu2023alpha,
+  title = {$\alpha$-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation},
+  author = {Liu, Xiao and Zhou, Yifan and Ikemoto, Shuhei and Amor, Heni Ben},
+  booktitle = {7th Annual Conference on Robot Learning},
+  year = {2023}
+}
+```
