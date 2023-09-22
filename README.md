@@ -1,5 +1,5 @@
 # α-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation
-This repo is the official implementation of ["$\alpha$-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation"](https://openreview.net/forum?id=0hQMcWfjG9) by Xiao Liu, Yifan Zhou, Shuhei Ikemoto, and Heni Ben Amor.
+This repo is the official implementation of ["α-MDF: An Attention-based Multimodal Differentiable Filter for Robot State Estimation"](https://openreview.net/forum?id=0hQMcWfjG9) by Xiao Liu, Yifan Zhou, Shuhei Ikemoto, and Heni Ben Amor.
 <p align="center">
 <img src = "img/teaser.png" width ="800" />
 </p>
