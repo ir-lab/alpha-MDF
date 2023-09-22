@@ -8,30 +8,23 @@ Differentiable Filters are recursive Bayesian estimators that derive the state t
 
 
 ## Getting Started
-#### docker workflow
+We provide implementation using `Pytorch`. Clone the repo `git clone https://github.com/ir-lab/alpha-MDF.git` and then there are two options for running the code.
 
-Clone the repo `git clone https://github.com/...`
-
-#### Set the environment variables
+#### 1. docker workflow
 Edit the `conf.sh` file to set the environment variables used to start the docker 
 containers. 
 
 ```
 IMAGE_TAG=  # unique tag to be used for the docker image.
-CONTAINER_NAME=UR5-task-1  # name of the docker container.
-DATASET_PATH=/home/datasets/  # Dataset path on the host machine.
+CONTAINER_NAME=UR5  # name of the docker container.
+DATASET_PATH=/home/xiao/datasets/  # Dataset path on the host machine.
 CUDA_VISIBLE_DEVICES=0  # comma-separated list of GPU's to set visible.
 ```
+Build the docker image by running `./build.sh`.
 
-#### Build the docker image
-Run `./build.sh`
 
-## Project Structure
-
-#### Training or testing
-Create or a modify a yaml file found in `./config` 
-with the appropriate parameters. Set the mode parameter to perform the 
-training or testing routine. 
+#### 2. Training or testing - PyTorch
+Create or a modify a yaml file found in `./latent_space/config/xxx.yaml`, and set the mode parameter to perform the training or testing routine. 
 
 ```
 mode:
@@ -39,32 +32,38 @@ mode:
 ```
 
 Run the training and test script using the bash file `./run_filter.sh $CONFIG_FILE` 
-where `$CONFIG_FILE` is the path to the config file. e.g. 
-`./run_filter.sh ./config/latent_UR5.yaml`
-
+where `$CONFIG_FILE` is the path to the config file.  
+```shell
+`./run_filter.sh ./config/xxx.yaml`
+```
 View the logs with `docker logs -f $CONTAINER_NAME`
 
-#### Tensorboard
+
+#### 4. Tensorboard
 
 Use the docker logs to copy the tensorboard link to a browser
 
 ```docker logs -f $CONTAINER_NAME-tensorboard```
  
-#### Without Docker
+#### 5. Without Docker
 
-If you don't want to use the docker container for training, you may directly use the
-`train.py` script and pass in the config file. Make sure to have corresponding libraries and
-dependencies installed on your local machine. Plase refer to `requirement.txt` and `Dockerfile` 
-for those required packages.
+Intall [PyTorch] (https://pytorch.org/get-started/previous-versions/) and then set up the environment using `pip install -r requirements.txt`. Make sure to have corresponding libraries and dependencies installed on your local environment, i.e., we use PyTorch 1.8.0 with cuda11.1.
 
-Go to `./latent_space` and then
+For training or testing, Go to `./UR5` and then Run 
 
-Run `python train.py --config ./config/latent_UR5.yaml`
+```
+python train.py --config ./config/xxx.yaml
+```
+
+
 
 
 ## Models
 ### $\alpha$-MDF
 attention-based Multimodal Differentiable Filters
+<p align="center">
+<img src = "img/result.gif" width ="800" />
+</p>
 
 
 ## Datasets
