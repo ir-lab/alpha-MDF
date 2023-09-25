@@ -16,7 +16,7 @@ We provide implementation using `Pytorch`. Clone the repo `git clone https://git
 
 Intall [PyTorch](https://pytorch.org/get-started/previous-versions/) and then set up the environment using `pip install -r requirements.txt`. Make sure to have corresponding libraries and dependencies installed on your local environment, i.e., we use PyTorch 1.8.0 with cuda11.1.
 
-For training or testing, Go to `./UR5` and then Run 
+For training or testing, Go to `./latent_space` and then Run 
 
 ```
 python train.py --config ./config/xxx.yaml
