@@ -67,7 +67,7 @@ We conduct a series of experiments to evaluate the efficacy of the $\alpha$-MDF 
 ### UR5 multimodal manipulation task
 We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arrangement tasks.
 <p align="center">
-<img src = "img/result.gif" width ="800" />
+<img src = "img/UR5-v1.0.gif" width ="800" />
 </p>
 
 **Left**: manipulation in a simulated environment with modalities [RGB, Depth, Joints]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **blue** correspond to low attention values, while those in **red** indicate high attention values.
@@ -76,10 +76,11 @@ We use $\alpha$-MDF for monitoring the state of a UR5 robot during tabletop arra
 ### Soft robot task
 This experiment involves implementing the $\alpha$-MDF to model the dynamics of a soft robot system, especially Tensegrity robot.
 <p align="center">
-<img src = "img/soft_robot.png" width ="800" />
+<img src = "img/soft_robot-v1.0.gif" width ="800" />
 </p>
 
-Predicted end-effector (EE) positions and quaternion vectors **q** in the soft robot modeling task. The **top** row displays the actual robot posture at the corresponding time, with the orange circle indicating the EE positions, which are not included in the RGB modality input.
+**Left**: Tensegrity robot with modalities [RGB, Depth, IMUs]  with The attention maps indicate the attention weights assigned to each modality during model inference. In the visualization, regions in **blue** correspond to low attention values, while those in **red** indicate high attention values.
+**Right**: real-time predicted XYZ trajectories.
 
 ## Datasets
 #### KITTI_dataset
