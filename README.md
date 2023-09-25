@@ -9,6 +9,10 @@ Differentiable Filters are recursive Bayesian estimators that derive the state t
 <img src = "img/framework.gif" width ="800" />
 </p>
 
+1. **Attention Gain**: Our approach is an attention-based strategy that replaces the conventional Kalman gain in the measurement update step, as depicted by the colored blocks in Fig.~\ref{fig:overview}. The gain mechanism is learned to update the current state based on multimodal observations.
+2. **Latent Space Filtering**: our proposed differentiable framework operates in a latent space, learning high-dimensional representations of system dynamics and capturing intricate nonlinear relationships. This approach proves particularly advantageous for highly nonlinear systems.
+3. **Empirical evaluations**: $\alpha$-MDF achieves significant reductions in state estimation errors, demonstrating nearly 4-fold improvements compared to state-of-the-art sensor fusion strategies in multimodal manipulation tasks. Furthermore, $\alpha$-MDF accurately models the non-linear dynamics of soft robots, consistently surpassing differentiable filter baselines by up to 45\%.
+
 ## Getting Started
 We provide implementation using `Pytorch`. Clone the repo `git clone https://github.com/ir-lab/alpha-MDF.git` and then there are two options for running the code.
 
